@@ -15,7 +15,7 @@ func initConfig() {
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		log.Fatal(err)
+		log.Panicln(err)
 	}
 }
 

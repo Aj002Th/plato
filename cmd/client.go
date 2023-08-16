@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"plato/client"
 )
 
 func init() {
@@ -17,4 +18,5 @@ var clientCmd = &cobra.Command{
 
 func ClientHandle(cmd *cobra.Command, args []string) {
 	fmt.Println("plato client")
+	client.RunMain()
 }

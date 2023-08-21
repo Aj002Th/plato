@@ -12,7 +12,7 @@ func init() {
 
 var clientCmd = &cobra.Command{
 	Use:   "client",
-	Short: "plato cui 客户端",
+	Short: "plato - cui 客户端",
 	Run:   ClientHandle,
 }
 

@@ -6,8 +6,19 @@ import (
 	"log"
 )
 
+var (
+	ConfigPath string
+)
+
 func init() {
 	cobra.OnInitialize(initConfig)
+
+	// 命令行参数
+	rootCmd.PersistentFlags().StringVar(
+		&ConfigPath,
+		"config",
+		"./plato.yaml",
+		"config file (default is ./plato.yaml)")
 }
 
 func initConfig() {

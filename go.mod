@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/cloudwego/hertz v0.6.7
 	github.com/jroimartin/gocui v0.5.0
+	github.com/panjf2000/ants v1.2.1
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.16.0
 	go.etcd.io/etcd/api/v3 v3.5.9

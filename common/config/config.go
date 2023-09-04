@@ -15,6 +15,11 @@ func Init(path string) {
 	}
 }
 
+// GetGlobalEnv 获取环境信息
+func GetGlobalEnv() string {
+	return viper.GetString("global.env")
+}
+
 // GetEndpointsForDiscovery 获取服务发现的地址
 func GetEndpointsForDiscovery() []string {
 	return viper.GetStringSlice("discovery.endpoints")

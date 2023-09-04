@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"plato/common/config"
+	"plato/common/logger"
 	"reflect"
 	"runtime"
 	"sync"
@@ -90,7 +91,7 @@ func (e *ePool) startEPoolProcess() {
 				panic(err)
 			}
 
-			// 专门注册epoll的协程
+			// 专门 把socket注册到epoll 的协程
 			go func() {
 				for {
 					select {
@@ -99,11 +100,13 @@ func (e *ePool) startEPoolProcess() {
 					case conn := <-e.eChan:
 						if err := epoll.add(conn); err != nil {
 							fmt.Printf("failed to add connection %v\n", err)
-							conn.Close() //登录未成功直接关闭连接
+							conn.Close()
 							continue
 						}
-						fmt.Printf("tcpNum:%d\n", tcpNum)
-						fmt.Printf("EpollerPool new connection[%v] tcpSize:%d\n", conn.RemoteAddr(), tcpNum)
+						fmt.Printf(
+							"EpollerPool new connection[%v] tcpSize:%d\n",
+							conn.RemoteAddr(),
+							getTcpNum())
 					}
 				}
 			}()
@@ -120,9 +123,11 @@ func (e *ePool) startEPoolProcess() {
 						return
 					}
 					for _, conn := range connections {
+						//logger.Debug("range conn brfore runProc")
 						if conn == nil {
-							break
+							continue
 						}
+						logger.Debug("range conn brfore1 runProc")
 						e.runProc(conn, epoll)
 					}
 				}
@@ -194,12 +199,16 @@ func (e *epoller) wait(msec int) ([]*connection, error) {
 	}
 
 	// 遍历就绪的 fd, 转换回 connection 结构
-	connections := make([]*connection, n)
+	var connections []*connection
 	for i := 0; i < n; i++ {
 		conn, ok := ep.table.Load(int(events[i].Fd))
 		if ok {
 			connections = append(connections, conn.(*connection))
 		}
+	}
+
+	if n > 0 {
+		logger.Debug("epoll: some connection is ready")
 	}
 
 	return connections, nil

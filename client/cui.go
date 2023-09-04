@@ -6,7 +6,8 @@ import (
 	"github.com/jroimartin/gocui"
 	"io/ioutil"
 	"log"
-	"plato/client/sdk"
+	"net"
+	"plato/common/sdk"
 )
 
 func init() {
@@ -19,11 +20,14 @@ var (
 	pos int // 控制 pasteUp 和 pasteDown
 )
 
-const (
-	serverAddr = "127.0.0.1:8080"
-	nick       = "heng"
-	userID     = "123456"
-	sessionID  = "1"
+var (
+	//serverAddr = "127.0.0.1:8080"
+	serverIP   = net.ParseIP("0.0.0.0")
+	serverPort = 8900
+
+	nick      = "heng"
+	userID    = "123456"
+	sessionID = "1"
 
 	echoUserID = "654321"
 	echoNick   = "simple"
@@ -94,11 +98,11 @@ func doSay(g *gocui.Gui, cv *gocui.View) {
 		Name:       echoNick,
 		FromUserID: echoUserID,
 		ToUserID:   userID,
-		Content:    string(p),
+		Content:    p,
 		SessionID:  sessionID,
 	}
 	// 先展示自己发的消息
-	viewPrint(g, "me", string(p), false)
+	viewPrint(g, "me", p, false)
 	// 发出消息
 	chat.Send(msg)
 
@@ -208,21 +212,25 @@ func viewUpdate(g *gocui.Gui, cv *gocui.View) error {
 	return nil
 }
 func viewUpScroll(*gocui.Gui, *gocui.View) error {
+	// todo
 	return nil
 }
 func viewDownScroll(*gocui.Gui, *gocui.View) error {
+	// todo
 	return nil
 }
 func pasteDown(*gocui.Gui, *gocui.View) error {
+	// todo
 	return nil
 }
 func pasteUP(*gocui.Gui, *gocui.View) error {
+	// todo
 	return nil
 }
 
 func RunMain() {
 	// 初始化核心对象 chat
-	chat = sdk.NewChat(serverAddr, nick, userID, sessionID)
+	chat = sdk.NewChat(serverIP, serverPort, nick, userID, sessionID)
 
 	// 创建 gui, 配置样式和键位绑定
 	g, err := gocui.NewGui(gocui.OutputNormal)
